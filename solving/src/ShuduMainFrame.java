@@ -15,14 +15,14 @@ import java.util.Calendar;
 public class ShuduMainFrame extends JFrame{
 
     public static long usedTime = 0;
-    private ShuduCanvers panelCanvers;
+    private static ShuduCanvers panelCanvers;
 
     public static java.util.List logs = new ArrayList<>();
     public static JTextArea logArea = new JTextArea();
 
     public static int[][] nums = new int[9][9];
 
-
+    private SoveThread soveThread;
 
     public ShuduMainFrame() {
         init();
@@ -75,13 +75,14 @@ public class ShuduMainFrame extends JFrame{
         runSudukuListerner(runButton);
 
         JButton interruptButton = new JButton("INTERRUPT");
+        interruptListerner(interruptButton);
         JButton clearButton = new JButton("CLEAR");
         clearSudukuListerner(clearButton);
 
         JButton quitButton = new JButton("QUIT");
         quitButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 System.exit(0);
             }
         });
@@ -95,18 +96,21 @@ public class ShuduMainFrame extends JFrame{
 
     }
 
+    private void cleanAllCellsValue(){
+        for (int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                panelCanvers.cells[j][i].setText("");
+                panelCanvers.cells[j][i].setBackground(Color.WHITE);
+                nums[j][i] = 0;
+            }
+        }
+    }
 
     private void clearSudukuListerner(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                for (int i=0; i<9; i++){
-                    for(int j=0; j<9; j++){
-                        panelCanvers.cells[j][i].setText("");
-                        panelCanvers.cells[j][i].setBackground(Color.WHITE);
-
-                    }
-                }
+            public void mousePressed(MouseEvent e) {
+                cleanAllCellsValue();
             }
         });
     }
@@ -114,46 +118,30 @@ public class ShuduMainFrame extends JFrame{
     private void runSudukuListerner(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                addLog("Working...");
-                boolean isInit = true;
-                int[][] init ={
-                    {0,2,0,0,0,9,0,1,0,0},
-                    {5,0,6,0,0,0,3,0,9,0},
-                    {0,8,0,5,0,2,0,6,0,0},
-                    {0,0,5,0,7,0,1,0,0,0},
-                    {0,0,0,2,0,8,0,0,0,0},
-                    {0,0,4,0,1,0,8,0,0,0},
-                    {0,5,0,8,0,7,0,3,0,0},
-                    {7,0,2,3,0,0,4,0,5,0},
-                    {0,4,0,0,0,0,0,7,0,0},
-                };
-                for (int i=0; i<9; i++){
-                    for(int j=0; j<9; j++){
-                        String str = panelCanvers.cells[j][i].getText();
-                        if(str.length()==1) {
-                            isInit = false;
-                            nums[i][j] = Integer.parseInt(str);
-                        }else {
-                            nums[i][j] = 0;
-                        }
-                    }
-                }
-                if(isInit){
-                    nums = init;
-                }
+            public void mousePressed(MouseEvent e) {
+                Boolean isFinish = false;
+                soveThread = new SoveThread();
+                soveThread.setFinish(isFinish);
+                soveThread.setPanelCanvers(panelCanvers);
+                soveThread.start();
+                StuckThread stuckThread = new StuckThread();
+                stuckThread.setFinish(isFinish);
+                stuckThread.start();
+            }
+        });
+    }
 
-                Solve solve = new Solve();
-                solve.setNums(nums);
-                solve.function(0,0);
-                nums = solve.result();
-                for (int i=0; i<9; i++){
+    private void interruptListerner(JButton jButton){
+        jButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                addLog("interrupt");
+                for(int i=0; i<9; i++){
                     for(int j=0; j<9; j++){
-                        panelCanvers.cells[i][j].setText(nums[j][i]+"");
-                        panelCanvers.cells[i][j].setBackground(Color.YELLOW);
+                        panelCanvers.cells[i][j].addMouseListener(panelCanvers);
                     }
                 }
-                addLog("Finish");
+                soveThread.stop();
             }
         });
     }
@@ -165,7 +153,7 @@ public class ShuduMainFrame extends JFrame{
     private void loadFileListener(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 JFileChooser jfc = new JFileChooser(this.getClass().getResource("/").getPath());
                 jfc.setDialogTitle("Choose a sudoku file");
                 jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -185,14 +173,22 @@ public class ShuduMainFrame extends JFrame{
                                     panelCanvers.cells[i][l].setText(chs[i]+"");
                                     panelCanvers.cells[i][l].setBackground(Color.YELLOW);
                                     panelCanvers.cells[i][l].setOpaque(true);
+                                    nums[l][i] = chs[i] - '0';
+
                                 }
                             }
                         }
+
+
                     } catch (FileNotFoundException e1) {
+                        addLog("File not found");
                         e1.printStackTrace();
                     } catch (IOException e2) {
                         e2.printStackTrace();
+                        addLog("IOException");
                     } catch (Exception e3){
+                        addLog("file line or row is less than 9, reinput or by hand");
+                        cleanAllCellsValue();
                         e3.printStackTrace();
                     }
                     finally {
@@ -228,5 +224,13 @@ public class ShuduMainFrame extends JFrame{
         }
         logs.add(log);
         logArea.setText(String.join("\n",logs));
+    }
+
+    public static ShuduCanvers getPanelCanvers() {
+        return panelCanvers;
+    }
+
+    public static void setPanelCanvers(ShuduCanvers panelCanvers) {
+        panelCanvers = panelCanvers;
     }
 }

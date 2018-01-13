@@ -12,5 +12,6 @@ public class ShuduCell extends JTextField {
         this.setFont(font);
         this.setBackground(Color.WHITE);
         this.setOpaque(true);
+        this.setHorizontalAlignment(JTextField.CENTER);
     }
 }
