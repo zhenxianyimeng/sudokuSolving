@@ -1,5 +1,5 @@
 /**
- * @author zjb
+ * Main Class
  * @date 2018/1/13.
  */
 public class NameOfMainClass {

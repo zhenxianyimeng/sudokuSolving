@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * @author zjb
+ *  Number Selector
  * @date 2018/1/13.
  */
 public class SelectNumFrame extends JDialog implements MouseListener {
@@ -16,14 +16,16 @@ public class SelectNumFrame extends JDialog implements MouseListener {
     }
 
     public SelectNumFrame(){
-        //隐藏界面上面的工具栏
         this.setUndecorated(true);
         this.setSize(150, 150);
         this.setBackground(new Color(255,204,153, 123));
         this.setLayout(null);
         addNum();
     }
-    //添加数字1~9
+
+    /**
+     * add number 1~9
+     */
     private void addNum() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

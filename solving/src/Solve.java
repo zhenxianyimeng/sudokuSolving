@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zjb
+ * sudoku solver
  * @date 2018/1/13.
  */
 public class Solve {

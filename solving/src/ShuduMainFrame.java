@@ -13,52 +13,38 @@ import java.util.Calendar;
  * @date 2018/1/13.
  */
 public class ShuduMainFrame extends JFrame{
-    public static int pass = 1; // 关卡
-    public static JLabel lbPass; // 显示关卡的lable
-    public static long usedTime = 0; // 玩家用时
-    private ShuduCanvers panelCanvers; // 主游戏区
-    public static Timer userTimeAction;
+
+    public static long usedTime = 0;
+    private ShuduCanvers panelCanvers;
 
     public static java.util.List logs = new ArrayList<>();
     public static JTextArea logArea = new JTextArea();
 
-    /*
-     * 默认构造函数
-     */
+    public static int[][] nums = new int[9][9];
+
+
+
     public ShuduMainFrame() {
-        // 初始化方法
         init();
-        // 添加组件
         addComponent();
-        // 添加主游戏区
         addCanvers();
+        addLog("Ready");
 
     }
 
-    /*
-     * 添加主游戏区
-     */
+
     private void addCanvers() {
         panelCanvers = new ShuduCanvers();
         panelCanvers.setBorder(new TitledBorder("SUDOKU"));
         panelCanvers.setBackground(Color.BLACK);
-
-        // 将主游戏区添加到窗体中
         this.add(panelCanvers, BorderLayout.CENTER);
 
     }
 
-    /*
-     * 添加组件区
-     */
+
     private void addComponent() {
         JPanel panelComponent = new JPanel();
-        // 添加消息区
         addPanelMsg(panelComponent);
-        // 添加时间区
-        //addPanelTime(panelComponent);
-
-        // 将组件添加到窗体顶部
         this.add(panelComponent, BorderLayout.NORTH);
 
         addPanelTime();
@@ -66,46 +52,17 @@ public class ShuduMainFrame extends JFrame{
 
     private void addPanelTime() {
         JPanel panel = new JPanel();
+        logArea.setSize(515, 200);
         panel.add(logArea);
         panel.setBorder(new TitledBorder("System Log"));
         panel.setBackground(Color.GREEN);
+        panel.setPreferredSize(new Dimension(515, 200));
         this.add(panel, BorderLayout.SOUTH);
-//        panelTime.setLayout(new GridLayout(2, 1));
-//
-//        final JLabel lbSysTime = new JLabel();
-//        final JLabel lbUserTime = new JLabel();
-//
-//        panelTime.add(lbSysTime, BorderLayout.NORTH);
-//        panelTime.add(lbUserTime, BorderLayout.SOUTH);
-//
-//        // 设置系统时间定时器
-//        Timer sysTimeAction = new Timer(500, new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                long timeMillis = System.currentTimeMillis();
-//                SimpleDateFormat df = new SimpleDateFormat(
-//                        "yyyy-MM-dd HH:mm:ss");
-//                lbSysTime.setText("    系统时间：  " + df.format(timeMillis));
-//            }
-//        });
-//        sysTimeAction.start();
-//        userTimeAction = new Timer(1000, new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                lbUserTime.setText("    您已用时：  " + (++usedTime)+ " sec.");
-//            }
-//        });
-//        userTimeAction.start();
 
-       // panelComponent.add(panelTime, BorderLayout.SOUTH);
 
     }
 
-    /*
-     * 添加消息区
-     */
+
     private void addPanelMsg(JPanel panelComponent) {
         panelComponent.setLayout(new GridLayout(1, 3));
 
@@ -158,6 +115,7 @@ public class ShuduMainFrame extends JFrame{
         jButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                addLog("Working...");
                 boolean isInit = true;
                 int[][] init ={
                     {0,2,0,0,0,9,0,1,0,0},
@@ -170,7 +128,6 @@ public class ShuduMainFrame extends JFrame{
                     {7,0,2,3,0,0,4,0,5,0},
                     {0,4,0,0,0,0,0,7,0,0},
                 };
-                int[][] nums = new int[9][9];
                 for (int i=0; i<9; i++){
                     for(int j=0; j<9; j++){
                         String str = panelCanvers.cells[j][i].getText();
@@ -193,8 +150,10 @@ public class ShuduMainFrame extends JFrame{
                 for (int i=0; i<9; i++){
                     for(int j=0; j<9; j++){
                         panelCanvers.cells[i][j].setText(nums[j][i]+"");
+                        panelCanvers.cells[i][j].setBackground(Color.YELLOW);
                     }
                 }
+                addLog("Finish");
             }
         });
     }
@@ -216,6 +175,7 @@ public class ShuduMainFrame extends JFrame{
                     File file = jfc.getSelectedFile();
                     BufferedReader br = null;
                     try {
+                        addLog("Loading "+file.getName());
                         br = new BufferedReader(new FileReader(file));
                         for(int l=0; l<9; l++){
                             String line = br.readLine();
@@ -255,15 +215,18 @@ public class ShuduMainFrame extends JFrame{
      */
     private void init() {
 
-        // 设置窗口初始大小
-        this.setSize(515, 620);
-        // 设置窗口初始位置
+        this.setSize(515, 800);
         this.setLocation(500, 50);
-        // 设置窗口标题
         this.setTitle("SUDOKU");
-        // 设置窗体不允许改变大小
         this.setResizable(false);
-        // 设置默认关闭操作
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void addLog(String log){
+        if(logs.size() >= 10){
+            logs.remove(0);
+        }
+        logs.add(log);
+        logArea.setText(String.join("\n",logs));
     }
 }
