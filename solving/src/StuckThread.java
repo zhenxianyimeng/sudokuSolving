@@ -1,5 +1,5 @@
 /**
- * @author zjb
+ *
  * @date 2018/1/13.
  */
 public class StuckThread extends Thread{
@@ -11,7 +11,7 @@ public class StuckThread extends Thread{
         try {
             Thread.sleep(15000);
             if(isFinish == false){
-                ShuduMainFrame.addLog("Stuck");
+                SudoMainFrame.addLog("Stuck");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -4,7 +4,7 @@
  */
 public class NameOfMainClass {
     public static void main(String[] args) {
-        ShuduMainFrame mainFrame = new ShuduMainFrame();
+        SudoMainFrame mainFrame = new SudoMainFrame();
         mainFrame.setVisible(true);
     }
 }

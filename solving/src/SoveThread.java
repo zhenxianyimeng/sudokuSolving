@@ -3,12 +3,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zjb
+ *
  * @date 2018/1/13.
  */
 public class SoveThread extends Thread{
 
-    private ShuduCanvers panelCanvers;
+    private SudoCanvers panelCanvers;
 
     private static final int N=3;
 
@@ -23,7 +23,7 @@ public class SoveThread extends Thread{
 
     @Override
     public void run() {
-        ShuduMainFrame.addLog("Working...");
+        SudoMainFrame.addLog("Working...");
         clearAllListener();
         isFinish = false;
         if(bak == null) {
@@ -31,19 +31,19 @@ public class SoveThread extends Thread{
                 for (int j = 0; j < 9; j++) {
                     String str = panelCanvers.cells[i][j].getText();
                     if (str.length() == 1) {
-                        ShuduMainFrame.nums[j][i] = Integer.parseInt(str);
+                        SudoMainFrame.nums[j][i] = Integer.parseInt(str);
                     }
                 }
             }
         }
         nums = new int[9][9];
-        //nums = ShuduMainFrame.nums;
+        //nums = SudoMainFrame.nums;
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                nums[i][j] = ShuduMainFrame.nums[i][j];
+                nums[i][j] = SudoMainFrame.nums[i][j];
             }
         }
-        bak = ShuduMainFrame.nums;
+        bak = SudoMainFrame.nums;
         function(0,0);
         if(results != null) {
             for (int i = 0; i < 9; i++) {
@@ -63,9 +63,9 @@ public class SoveThread extends Thread{
                     panelCanvers.cells[i][j].setBackground(Color.RED);
                 }
             }
-            ShuduMainFrame.nums = new int[9][9];
+            SudoMainFrame.nums = new int[9][9];
         }
-        ShuduMainFrame.addLog("Finish");
+        SudoMainFrame.addLog("Finish");
         addAllListener();
         isFinish = true;
     }
@@ -141,18 +141,18 @@ public class SoveThread extends Thread{
     }
 
 
-    public ShuduCanvers getPanelCanvers() {
+    public SudoCanvers getPanelCanvers() {
         return panelCanvers;
     }
 
-    public void setPanelCanvers(ShuduCanvers panelCanvers) {
+    public void setPanelCanvers(SudoCanvers panelCanvers) {
         this.panelCanvers = panelCanvers;
     }
 
     private void clearAllListener() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                panelCanvers.cells[i][j].removeMouseListener(ShuduMainFrame.getPanelCanvers());
+                panelCanvers.cells[i][j].removeMouseListener(SudoMainFrame.getPanelCanvers());
                 //panelCanvers.cells[i][j].addMouseListener(null);
             }
         }
@@ -162,7 +162,7 @@ public class SoveThread extends Thread{
     private void addAllListener() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                panelCanvers.cells[i][j].addMouseListener(ShuduMainFrame.getPanelCanvers());
+                panelCanvers.cells[i][j].addMouseListener(SudoMainFrame.getPanelCanvers());
                 //panelCanvers.cells[i][j].addMouseListener(null);
             }
         }

@@ -8,20 +8,20 @@ import java.awt.event.MouseListener;
  * centre comptent
  * @date 2018/1/13.
  */
-public class ShuduCanvers extends JPanel implements MouseListener {
-    ShuduCell[][] cells;
+public class SudoCanvers extends JPanel implements MouseListener {
+    SoduCell[][] cells;
 
     private SelectNumFrame selectNum;
 
-    public ShuduCanvers() {
-        ShuduMainFrame.usedTime = 0;
-        // 加载数独区
+    public SudoCanvers() {
+        SudoMainFrame.usedTime = 0;
+        // load cells
         this.setLayout(null);
-        cells = new ShuduCell[9][9];
+        cells = new SoduCell[9][9];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                cells[i][j] = new ShuduCell();
-                // positon
+                cells[i][j] = new SoduCell();
+                // cells positon
                 cells[i][j].setLocation(20 + i * 50 + (i / 3) * 5, 20 + j * 50
                         + (j / 3) * 5);
                 cells[i][j].setEnabled(false);
@@ -41,12 +41,16 @@ public class ShuduCanvers extends JPanel implements MouseListener {
 
     }
 
+    /**
+     * cell selector
+     * @param e
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         int modes = e.getModifiers();
         if ((modes & InputEvent.BUTTON3_MASK) != 0) {// right click
             // clear cell
-            ((ShuduCell) e.getSource()).setText("");
+            ((SoduCell) e.getSource()).setText("");
         } else if ((modes & InputEvent.BUTTON1_MASK) != 0) {// left click
             // select number
             if (selectNum != null) {
@@ -56,7 +60,7 @@ public class ShuduCanvers extends JPanel implements MouseListener {
             selectNum.setModal(true);
             selectNum.setLocation(e.getLocationOnScreen().x,
                     e.getLocationOnScreen().y);
-            selectNum.setCell((ShuduCell) e.getSource());
+            selectNum.setCell((SoduCell) e.getSource());
             selectNum.setVisible(true);
         }
     }

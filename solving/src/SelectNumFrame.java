@@ -9,9 +9,9 @@ import java.awt.event.MouseListener;
  * @date 2018/1/13.
  */
 public class SelectNumFrame extends JDialog implements MouseListener {
-    private ShuduCell cell;
+    private SoduCell cell;
 
-    public void setCell(ShuduCell cell) {
+    public void setCell(SoduCell cell) {
         this.cell = cell;
     }
 

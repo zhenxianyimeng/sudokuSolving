@@ -1,21 +1,18 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
- * @author zjb
+ *
  * @date 2018/1/13.
  */
-public class ShuduMainFrame extends JFrame{
+public class SudoMainFrame extends JFrame{
 
     public static long usedTime = 0;
-    private static ShuduCanvers panelCanvers;
+    private static SudoCanvers panelCanvers;
 
     public static java.util.List logs = new ArrayList<>();
     public static JTextArea logArea = new JTextArea();
@@ -24,7 +21,7 @@ public class ShuduMainFrame extends JFrame{
 
     private SoveThread soveThread;
 
-    public ShuduMainFrame() {
+    public SudoMainFrame() {
         init();
         addComponent();
         addCanvers();
@@ -34,7 +31,7 @@ public class ShuduMainFrame extends JFrame{
 
 
     private void addCanvers() {
-        panelCanvers = new ShuduCanvers();
+        panelCanvers = new SudoCanvers();
         panelCanvers.setBorder(new TitledBorder("SUDOKU"));
         panelCanvers.setBackground(Color.BLACK);
         this.add(panelCanvers, BorderLayout.CENTER);
@@ -47,10 +44,13 @@ public class ShuduMainFrame extends JFrame{
         addPanelMsg(panelComponent);
         this.add(panelComponent, BorderLayout.NORTH);
 
-        addPanelTime();
+        addPanelLog();
     }
 
-    private void addPanelTime() {
+    /**
+     * log panel
+     */
+    private void addPanelLog() {
         JPanel panel = new JPanel();
         logArea.setSize(515, 200);
         panel.add(logArea);
@@ -62,7 +62,10 @@ public class ShuduMainFrame extends JFrame{
 
     }
 
-
+    /**
+     * button panel
+     * @param panelComponent
+     */
     private void addPanelMsg(JPanel panelComponent) {
         panelComponent.setLayout(new GridLayout(1, 3));
 
@@ -106,6 +109,10 @@ public class ShuduMainFrame extends JFrame{
         }
     }
 
+    /**
+     * clear cells number
+     * @param jButton
+     */
     private void clearSudukuListerner(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -115,6 +122,10 @@ public class ShuduMainFrame extends JFrame{
         });
     }
 
+    /**
+     * run sudoku
+     * @param jButton
+     */
     private void runSudukuListerner(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -131,6 +142,10 @@ public class ShuduMainFrame extends JFrame{
         });
     }
 
+    /**
+     * interrupt
+     * @param jButton
+     */
     private void interruptListerner(JButton jButton){
         jButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -226,11 +241,11 @@ public class ShuduMainFrame extends JFrame{
         logArea.setText(String.join("\n",logs));
     }
 
-    public static ShuduCanvers getPanelCanvers() {
+    public static SudoCanvers getPanelCanvers() {
         return panelCanvers;
     }
 
-    public static void setPanelCanvers(ShuduCanvers panelCanvers) {
+    public static void setPanelCanvers(SudoCanvers panelCanvers) {
         panelCanvers = panelCanvers;
     }
 }
